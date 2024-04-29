@@ -2,19 +2,25 @@ import React, { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 
-/* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
 
-/* ****Pages***** */
-const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')))
-const SamplePage = Loadable(lazy(() => import('../views/sample-page/SamplePage')))
-const Icons = Loadable(lazy(() => import('../views/icons/Icons')))
-const TypographyPage = Loadable(lazy(() => import('../views/utilities/TypographyPage')))
-const Shadow = Loadable(lazy(() => import('../views/utilities/Shadow')))
+const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')));
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 const Register = Loadable(lazy(() => import('../views/authentication/Register')));
 const Login = Loadable(lazy(() => import('../views/authentication/Login')));
+
+const Assignments = Loadable(lazy(() => import('../views/assignments/assignments')));
+const AssignmentDetails = Loadable(lazy(() => import('../views/assignments/AssignmentDetails')));
+const CreateAssignment = Loadable(lazy(() => import('../views/assignments/CreateAssignment')));
+
+const Quiz = Loadable(lazy(() => import('../views/quiz/quiz')));
+const QuizDetails = Loadable(lazy(() => import('../views/quiz/QuizDetails')));
+
+const Announcement = Loadable(lazy(() => import('../views/announcements/announcments')));
+const AnnouncementDetails = Loadable(
+  lazy(() => import('../views/announcements/AnnouncementDetails')),
+);
 
 const Router = [
   {
@@ -23,10 +29,17 @@ const Router = [
     children: [
       { path: '/', element: <Navigate to="/dashboard" /> },
       { path: '/dashboard', exact: true, element: <Dashboard /> },
-      { path: '/sample-page', exact: true, element: <SamplePage /> },
-      { path: '/icons', exact: true, element: <Icons /> },
-      { path: '/ui/typography', exact: true, element: <TypographyPage /> },
-      { path: '/ui/shadow', exact: true, element: <Shadow /> },
+
+      { path: '/assignments', exact: false, element: <Assignments /> },
+      { path: '/assignments/view/:id', exact: false, element: <AssignmentDetails /> },
+      { path: '/assignments/create', exact: false, element: <CreateAssignment /> },
+
+      { path: '/quiz', exact: false, element: <Quiz /> },
+      { path: '/quiz/view/:id', exact: false, element: <QuizDetails /> },
+
+      { path: '/announcement', exact: false, element: <Announcement /> },
+      { path: '/announcement/:id', exact: false, element: <AnnouncementDetails /> },
+
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

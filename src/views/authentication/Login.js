@@ -8,7 +8,6 @@ import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
 
 const Login2 = () => {
-  
   return (
     <PageContainer title="Login" description="this is Login page">
       <Box
@@ -38,33 +37,33 @@ const Login2 = () => {
             alignItems="center"
           >
             <Card elevation={9} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: '500px' }}>
-              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
               <AuthLogin
-                subtext={
-                  <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
-                    Your Social Campaigns
-                  </Typography>
-                }
-                subtitle={
-                  <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
-                    <Typography color="textSecondary" variant="h6" fontWeight="500">
-                      New to Modernize?
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      to="/auth/register"
-                      fontWeight="500"
-                      sx={{
-                        textDecoration: 'none',
-                        color: 'primary.main',
-                      }}
-                    >
-                      Create an account
-                    </Typography>
-                  </Stack>
-                }
+              // subtext={
+              //   <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
+              //     Your Social Campaigns
+              //   </Typography>
+              // }
+              // subtitle={
+              //   <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
+              //     <Typography color="textSecondary" variant="h6" fontWeight="500">
+              //       New to Modernize?
+              //     </Typography>
+              //     <Typography
+              //       component={Link}
+              //       to="/auth/register"
+              //       fontWeight="500"
+              //       sx={{
+              //         textDecoration: 'none',
+              //         color: 'primary.main',
+              //       }}
+              //     >
+              //       Create an account
+              //     </Typography>
+              //   </Stack>
+              // }
               />
             </Card>
           </Grid>

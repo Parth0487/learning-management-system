@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ReactComponent as LogoDark } from 'src/assets/images/logos/dark-logo.svg';
-import { styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 
 const LinkStyled = styled(Link)(() => ({
   height: '70px',
@@ -11,10 +11,18 @@ const LinkStyled = styled(Link)(() => ({
 
 const Logo = () => {
   return (
-    <LinkStyled to="/">
-      <LogoDark height={70} />
-    </LinkStyled>
-  )
+    <>
+      <Typography align="center" fontSize={22} pt={3}>
+        LMS
+      </Typography>
+      <Typography align="center" fontSize={14} pb={3}>
+        Learning Management System
+      </Typography>
+    </>
+    // <LinkStyled to="/">
+    //   {/* <LogoDark height={70} /> */}
+    // </LinkStyled>
+  );
 };
 
 export default Logo;

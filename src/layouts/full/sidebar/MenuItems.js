@@ -1,11 +1,13 @@
 import {
-  IconAperture, IconCopy, IconLayoutDashboard, IconLogin, IconMoodHappy, IconTypography, IconUserPlus
+  IconLayoutDashboard,
+  IconClipboard,
+  IconTextSpellcheck,
+  IconSpeakerphone,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
 
 const Menuitems = [
-
   {
     id: uniqueId(),
     title: 'Dashboard',
@@ -15,41 +17,30 @@ const Menuitems = [
 
   {
     id: uniqueId(),
-    title: 'Typography',
-    icon: IconTypography,
-    href: '/ui/typography',
+    title: 'Assignments',
+    icon: IconClipboard,
+    href: '/assignments',
   },
+
   {
     id: uniqueId(),
-    title: 'Shadow',
-    icon: IconCopy,
-    href: '/ui/shadow',
+    title: 'Quiz',
+    icon: IconTextSpellcheck,
+    href: '/quiz',
   },
-  
+
   {
     id: uniqueId(),
-    title: 'Login',
-    icon: IconLogin,
-    href: '/auth/login',
+    title: 'Announcements',
+    icon: IconSpeakerphone,
+    href: '/announcement',
   },
+
   {
     id: uniqueId(),
-    title: 'Register',
-    icon: IconUserPlus,
-    href: '/register',
-  },
-  
-  {
-    id: uniqueId(),
-    title: 'Icons',
-    icon: IconMoodHappy,
-    href: '/icons',
-  },
-  {
-    id: uniqueId(),
-    title: 'Sample Page',
-    icon: IconAperture,
-    href: '/sample-page',
+    title: 'Grades',
+    icon: IconSpeakerphone,
+    href: '/grades',
   },
 ];
 
