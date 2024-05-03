@@ -21,8 +21,16 @@ const Quiz = () => {
   }, []);
 
   const fetchQuizList = async () => {
-    fetch('http://localhost:5000/quiz', {
-      method: 'GET',
+    let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+    fetch('http://localhost:5000/grade', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify({
+        userId: userDetails.userId,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -35,44 +43,56 @@ const Quiz = () => {
   };
 
   const columns = [
-    { field: 'quizId', headerName: 'ID', width: 50 },
     {
-      field: 'title',
-      headerName: 'Title',
-      width: 200,
-      renderCell: (params) => (
-        <Typography
-          fontSize={13}
-          variant="body1"
-          textAlign="right"
-          component={Link}
-          to={`/quiz/view/${params.row.quizId}`}
-          sx={{ color: '#000' }}
-        >
-          {params.row.title}
-        </Typography>
-      ),
+      field: 'quizTitle',
+      headerName: 'Quiz Name',
+      width: 150,
     },
-    { field: 'description', headerName: 'Description', width: 400 },
+    { field: 'quizDescription', headerName: 'Description', width: 350 },
     {
       field: 'date',
       headerName: 'Due Date',
       renderCell: (params) => (
         <>
-          <Typography variant="caption">{moment(params.row.date).format('yyyy-MM-DD')}</Typography>
+          <Typography variant="caption">
+            {moment(params.row.quizDate).format('MMM DD ')} by{' '}
+            {moment(params.row.quizDate).format('hh:mm a ')}
+          </Typography>
+          <br />
         </>
       ),
+      width: 140,
     },
     {
-      field: 'questions',
-      headerName: 'Questions',
-      width: 100,
+      field: 'date1',
+      headerName: 'Submitted On',
+      renderCell: (params) => (
+        <>
+          <Typography variant="caption">
+            {moment(params.row.quizDate).format('MMM DD ')} at{' '}
+            {moment(params.row.quizDate).format('hh:mm a ')}
+          </Typography>
+        </>
+      ),
+      width: 140,
+    },
+    {
+      field: 'score',
+      headerName: 'Score',
+      renderCell: (params) => (
+        <>
+          <Typography variant="caption">
+            {params.row.score} / {params.row.quizPoint}
+          </Typography>
+        </>
+      ),
+      width: 80,
     },
   ];
 
   return (
-    <PageContainer title="Quiz" description="this is Sample page">
-      <DashboardCard title="Quiz">
+    <PageContainer title="Grades" description="this is Sample page">
+      <DashboardCard title="My Grades">
         <DataGrid
           rows={tableData}
           columns={columns}
@@ -81,15 +101,13 @@ const Quiz = () => {
               paginationModel: { page: 0, pageSize: 10 },
             },
           }}
-          getRowId={(row) => row.quizId}
+          getRowId={(row) => row.gradeId}
           getRowHeight={() => 'auto'}
           sx={{
-            border: '1px solid #ccc',
-            // p: 1,
             minHeight: '300px',
             '& .MuiDataGrid-row': {
               borderTop: '1px solid #ccc', // Adds a border around each row
-              py: 2,
+              py: 1,
             },
           }}
         />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Chip, Divider, Box } from '@mui/material';
+import { Typography, Chip, Divider, Box, FormControlLabel, Switch } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 
@@ -11,12 +11,14 @@ const AssignmentDetails = () => {
   const { id: assignmentId = 1 } = params;
   const [assignment, setAssignment] = useState({});
 
+  const [isPublished, setIsPublished] = useState(false);
+
   useEffect(() => {
     fetchAssignmentDetails();
   }, []);
 
   const fetchAssignmentDetails = async () => {
-    fetch(`http://localhost:5000/faculty/assignment/${assignmentId}`, {
+    fetch(`http://localhost:5000/assignment/${assignmentId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -24,6 +26,11 @@ const AssignmentDetails = () => {
         setAssignment(data);
       })
       .catch((error) => console.error('Error loading the assignment data:', error));
+  };
+
+  const handlePublishChange = (event) => {
+    setIsPublished(event.target.checked);
+    // Optionally, update the publish status on the server here
   };
 
   // Check if the assignment is upcoming or past
@@ -55,6 +62,10 @@ const AssignmentDetails = () => {
           </Typography>
         )}
         <Divider style={{ margin: '20px 0' }} />
+        <FormControlLabel
+          control={<Switch checked={isPublished} onChange={handlePublishChange} />}
+          label="Publish"
+        />
         <Typography variant="body1">
           Additional details like submission guidelines, grading criteria, and resource materials
           can be added here. This text serves as placeholder content to fill the page and offer a

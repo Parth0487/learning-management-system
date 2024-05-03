@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -22,6 +22,7 @@ import AdminImg from 'src/assets/images/profile/admin.png';
 import FacultyImg from 'src/assets/images/profile/faculty.png';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [anchorEl2, setAnchorEl2] = useState(null);
   const [user, setUser] = useState({});
   const handleClick2 = (event) => {
@@ -110,28 +111,28 @@ const Profile = () => {
           },
         }}
       >
-        {/* <MenuItem>
+        {/* <Box mt={1} py={1} px={2}>
+          <Typography align="center">Account Type: &nbsp; {getUserType()}</Typography>
+        </Box> */}
+        <MenuItem onClick={() => navigate('/profile')}>
           <ListItemIcon>
             <IconUser width={20} />
           </ListItemIcon>
           <ListItemText>My Profile</ListItemText>
         </MenuItem>
-        <MenuItem>
+        {/* <MenuItem>
           <ListItemIcon>
             <IconMail width={20} />
           </ListItemIcon>
           <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
+        </MenuItem> */}
+        {/* <MenuItem>
           <ListItemIcon>
             <IconListCheck width={20} />
           </ListItemIcon>
           <ListItemText>My Tasks</ListItemText>
         </MenuItem> */}
 
-        <Box mt={1} py={1} px={2}>
-          <Typography align="center">Account Type: &nbsp; {getUserType()}</Typography>
-        </Box>
         <Box mt={1} py={1} px={2}>
           <Button to="/auth/login" variant="outlined" color="primary" component={Link} fullWidth>
             Logout

@@ -3,9 +3,16 @@ import {
   IconClipboard,
   IconTextSpellcheck,
   IconSpeakerphone,
+  IconTable,
+  IconUser,
+  IconFileDescription,
+  IconFile,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
+
+const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+console.log('USER: ', userDetails);
 
 const Menuitems = [
   {
@@ -18,7 +25,7 @@ const Menuitems = [
   {
     id: uniqueId(),
     title: 'Assignments',
-    icon: IconClipboard,
+    icon: IconFile,
     href: '/assignments',
   },
 
@@ -33,14 +40,27 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Announcements',
     icon: IconSpeakerphone,
-    href: '/announcement',
+    href: '/announcements',
   },
 
   {
     id: uniqueId(),
     title: 'Grades',
-    icon: IconSpeakerphone,
+    icon: IconTable,
     href: '/grades',
+  },
+
+  // {
+  //   id: uniqueId(),
+  //   title: 'Students',
+  //   icon: IconUser,
+  //   href: '/students',
+  // },
+  {
+    id: uniqueId(),
+    title: 'Courses',
+    icon: IconFileDescription,
+    href: '/courses',
   },
 ];
 

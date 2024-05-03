@@ -22,6 +22,15 @@ const AnnouncementDetails = Loadable(
   lazy(() => import('../views/announcements/AnnouncementDetails')),
 );
 
+const Grades = Loadable(lazy(() => import('../views/grades/grades')));
+
+const Profile = Loadable(lazy(() => import('../views/profile/profile')));
+
+const Courses = Loadable(lazy(() => import('../views/courses/courses')));
+const CourseDetails = Loadable(lazy(() => import('../views/courses/CourseDetails')));
+
+const Students = Loadable(lazy(() => import('../views/students/students')));
+
 const Router = [
   {
     path: '/',
@@ -37,8 +46,17 @@ const Router = [
       { path: '/quiz', exact: false, element: <Quiz /> },
       { path: '/quiz/view/:id', exact: false, element: <QuizDetails /> },
 
-      { path: '/announcement', exact: false, element: <Announcement /> },
-      { path: '/announcement/:id', exact: false, element: <AnnouncementDetails /> },
+      { path: '/announcements', exact: false, element: <Announcement /> },
+      { path: '/announcements/:id', exact: false, element: <AnnouncementDetails /> },
+
+      { path: '/grades', exact: false, element: <Grades /> },
+
+      { path: '/students', exact: false, element: <Students /> },
+
+      { path: '/courses', exact: false, element: <Courses /> },
+      { path: '/courses/view/:id', exact: false, element: <CourseDetails /> },
+
+      { path: '/profile', exact: false, element: <Profile /> },
 
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],

@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Select,
+  OutlinedInput,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,7 +24,10 @@ const CreateAssignment = () => {
     description: '',
     date: null,
     point: '',
+    courseId: '',
   });
+
+  const [courseList, setCourseList] = useState([]);
 
   const handleChange = (prop) => (event) => {
     setFormData({ ...formData, [prop]: event.target.value });
@@ -26,9 +39,8 @@ const CreateAssignment = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData); // Implement your submit logic here
 
-    fetch(`http://localhost:5000/faculty/assignment`, {
+    fetch(`http://localhost:5000/assignment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -45,6 +57,33 @@ const CreateAssignment = () => {
       .catch((error) => console.error('Error loading the assignment data:', error));
   };
 
+  useEffect(() => {
+    fetchCourseList();
+  }, []);
+
+  const fetchCourseList = async () => {
+    fetch('http://localhost:5000/course', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify({
+        semester: [],
+        faculty: [],
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.length) {
+          let list = data.map((i) => {
+            return { ...i, id: i.courseId };
+          });
+
+          setCourseList(list);
+        }
+      });
+  };
+
   return (
     <PageContainer title="Create Assignment" description="Add a new assignment">
       <DashboardCard title="New Assignment Form">
@@ -57,7 +96,6 @@ const CreateAssignment = () => {
                 label="Title"
                 value={formData.title}
                 onChange={handleChange('title')}
-                margin="normal"
               />
             </Grid>
             <Grid item xs={12}>
@@ -67,12 +105,11 @@ const CreateAssignment = () => {
                 label="Description"
                 value={formData.description}
                 onChange={handleChange('description')}
-                margin="normal"
                 multiline
                 rows={4}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Due Date"
@@ -82,14 +119,13 @@ const CreateAssignment = () => {
                   renderInput={(props) => <TextField {...props} fullWidth required />}
                   slotProps={{
                     textField: {
-                      size: 'small',
                       fullWidth: true,
                     },
                   }}
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <TextField
                 required
                 fullWidth
@@ -98,6 +134,28 @@ const CreateAssignment = () => {
                 onChange={handleChange('point')}
                 type="number"
               />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <FormControl fullWidth>
+                <InputLabel id="semester-select-label" required>
+                  Course
+                </InputLabel>
+                <Select
+                  fullWidth
+                  label="Course"
+                  value={formData.courseId}
+                  onChange={handleChange('courseId')}
+                  input={<OutlinedInput label="Course" required />}
+                  required
+                  // renderValue={(selected) => selected.join(', ')}
+                >
+                  {courseList.map((course) => (
+                    <MenuItem key={course.id} value={course.id}>
+                      {course.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <Button

@@ -28,7 +28,7 @@ const Assignments = () => {
   }, []);
 
   const fetchAssignments = async () => {
-    fetch('http://localhost:5000/faculty/assignment', {
+    fetch('http://localhost:5000/assignment', {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -89,13 +89,24 @@ const Assignments = () => {
         </>
       ),
     },
+    {
+      field: 'isPublished',
+      headerName: 'Status',
+      renderCell: (params) => (
+        <>
+          <Typography variant="caption">
+            {params.row.isPublished === 'yes' ? 'Published' : 'Not Published'}
+          </Typography>
+        </>
+      ),
+    },
   ];
 
   return (
     <PageContainer title="Assignments" description="this is Sample page">
-      <DashboardCard title="Assignments">
-        <Box display="flex" justifyContent="end" alignItems="center" marginBottom={2}>
-          {/* <Typography variant="h6">Manage Assignments</Typography> */}
+      <DashboardCard title="">
+        <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
+          <Typography variant="h6"> Assignments</Typography>
           <Button
             variant="contained"
             color="primary"
@@ -113,7 +124,7 @@ const Assignments = () => {
               <Tab label="Past Assignments" value="2" />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="1" p={0}>
             <DataGrid
               rows={tableData.upcoming}
               columns={columns}
@@ -123,10 +134,14 @@ const Assignments = () => {
                 },
               }}
               getRowId={(row) => row.assignmentId}
+              getRowHeight={() => 'auto'}
               sx={{
+                border: '1px solid #ccc',
+                // p: 1,
                 minHeight: '300px',
                 '& .MuiDataGrid-row': {
                   borderTop: '1px solid #ccc', // Adds a border around each row
+                  py: 2,
                 },
               }}
             />
@@ -141,10 +156,14 @@ const Assignments = () => {
                 },
               }}
               getRowId={(row) => row.assignmentId}
+              getRowHeight={() => 'auto'}
               sx={{
+                border: '1px solid #ccc',
+                // p: 1,
                 minHeight: '300px',
                 '& .MuiDataGrid-row': {
                   borderTop: '1px solid #ccc', // Adds a border around each row
+                  py: 2,
                 },
               }}
             />

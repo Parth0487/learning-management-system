@@ -12,7 +12,7 @@ const Announcement = () => {
   }, []);
 
   const fetchAnnouncementList = async () => {
-    fetch('http://localhost:5000/faculty/announcement', {
+    fetch('http://localhost:5000/announcement', {
       method: 'GET',
     })
       .then((response) => response.json())

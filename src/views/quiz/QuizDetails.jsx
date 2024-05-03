@@ -14,7 +14,7 @@ const QuizDetails = () => {
   }, []);
 
   const fetchQuizDetails = async () => {
-    fetch(`http://localhost:5000/faculty/quiz/${quizId}`, {
+    fetch(`http://localhost:5000/quiz/${quizId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
