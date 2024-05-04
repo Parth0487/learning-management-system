@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Card, CardContent, Box } from '@mui/material';
+import { Typography, Card, CardContent, Box, Button } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { IconPlus } from '@tabler/icons';
 
 const Announcement = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null } = userDetails;
+
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
@@ -26,8 +32,25 @@ const Announcement = () => {
   };
 
   return (
-    <PageContainer title="Announcement" description="Overview of all announcements">
-      <DashboardCard title="Announcement List">
+    <PageContainer title="Announcements" description="Overview of all announcements">
+      <DashboardCard title="">
+        <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
+          <Typography variant="h6"> Announcements</Typography>
+          {userTypeCode === 'STUDENT' ? (
+            <></>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/announcements/create"
+              startIcon={<IconPlus />}
+            >
+              Create Announcement
+            </Button>
+          )}
+        </Box>
+
         {tableData.map((announcement) => (
           <Card key={announcement.id} variant="outlined" sx={{ mb: 2, mt: 2 }}>
             <CardContent>

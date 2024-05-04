@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Typography,
-  Chip,
   Divider,
-  Box,
-  Paper,
   Avatar,
   List,
   ListItem,
@@ -40,7 +37,7 @@ const MyProfile = () => {
           {studentProfile.name || 'No name available'}
         </Typography>
         <Typography color="textSecondary">
-          {studentProfile.userName || 'No program data available'}
+          {studentProfile.email || 'No program data available'}
         </Typography>
         <Divider style={{ margin: '20px 0' }} />
         <List>

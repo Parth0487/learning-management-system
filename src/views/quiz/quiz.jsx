@@ -13,6 +13,10 @@ import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
 
 const Quiz = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null, userId } = userDetails;
+
   const [tableData, setTableData] = useState([]);
   const [value, setValue] = React.useState('1');
 
@@ -22,7 +26,14 @@ const Quiz = () => {
 
   const fetchQuizList = async () => {
     fetch('http://localhost:5000/quiz', {
-      method: 'GET',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify({
+        userTypeCode,
+        userId,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -63,16 +74,40 @@ const Quiz = () => {
         </>
       ),
     },
+    // {
+    //   field: 'questions',
+    //   headerName: 'Questions',
+    //   width: 100,
+    // },
+
     {
-      field: 'questions',
-      headerName: 'Questions',
-      width: 100,
+      field: 'isPublished',
+      headerName: 'Status',
+      renderCell: (params) => (
+        <>
+          <Typography variant="caption">
+            {params.row.isPublished === 'yes' ? 'Published' : 'Not Published'}
+          </Typography>
+        </>
+      ),
     },
   ];
 
   return (
     <PageContainer title="Quiz" description="this is Sample page">
-      <DashboardCard title="Quiz">
+      <DashboardCard title="">
+        <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
+          <Typography variant="h6"> Quiz</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/quiz/create"
+            startIcon={<IconPlus />}
+          >
+            Create Quiz
+          </Button>
+        </Box>
         <DataGrid
           rows={tableData}
           columns={columns}

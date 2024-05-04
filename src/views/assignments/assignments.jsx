@@ -13,6 +13,10 @@ import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
 
 const Assignments = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null, userId } = userDetails;
+
   const [tableData, setTableData] = useState({
     upcoming: [],
     past: [],
@@ -29,12 +33,19 @@ const Assignments = () => {
 
   const fetchAssignments = async () => {
     fetch('http://localhost:5000/assignment', {
-      method: 'GET',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify({
+        userTypeCode,
+        userId,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
         let list = data.map((i) => {
-          return { ...i, id: i.assignmentInd };
+          return { ...i, id: i.assignmentId };
         });
 
         let upcoming = [];

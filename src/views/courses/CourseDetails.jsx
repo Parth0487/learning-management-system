@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Chip, Divider, Box, Grid, Button } from '@mui/material';
+import { Typography, Chip, Divider, Box, Grid, Button, TextField } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import { useParams } from 'react-router-dom';
@@ -10,10 +10,16 @@ import AddStudent from './AddStudent';
 import AddFaculty from './AddFaculty';
 
 const CourseDetails = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null } = userDetails;
+
   const { id: courseId = 1 } = useParams();
   const [courseData, setCourseData] = useState({});
   const [studentList, setStudentList] = useState([]);
   const [facultyList, setFacultyList] = useState([]);
+
+  const [description, setDescription] = useState('');
 
   const columns = [
     {
@@ -28,7 +34,7 @@ const CourseDetails = () => {
       flex: 1,
     },
     {
-      field: 'userName',
+      field: 'email',
       headerName: 'Username',
       minWidth: 150,
       flex: 1,
@@ -58,6 +64,7 @@ const CourseDetails = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setDescription(data.description);
         setCourseData(data);
       })
       .catch((error) => console.error('Error loading the course data:', error));
@@ -108,6 +115,27 @@ const CourseDetails = () => {
     }
   };
 
+  const updateCourseContent = () => {
+    let req = { description };
+
+    fetch(`http://localhost:5000/course/${courseId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify(req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.success) {
+          alert('Content Updated!');
+        }
+
+        fetchData();
+      })
+      .catch((error) => console.error('Error loading the course data:', error));
+  };
+
   return (
     <PageContainer title="Course Details" description="Detailed view of the course">
       <DashboardCard title="Course Details">
@@ -119,10 +147,40 @@ const CourseDetails = () => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body1" gutterBottom>
+            {/* <Typography variant="body1" gutterBottom>
               {courseData.description || 'No description available'}
-            </Typography>
+            </Typography> */}
+            <Typography>Syllabus/Content</Typography>
+            <TextField
+              fullWidth
+              value={description}
+              multiline
+              rows={20}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={!(userTypeCode === 'FACULTY')}
+              sx={{
+                '& .MuiInputBase-input.Mui-disabled': {
+                  WebkitTextFillColor: '#000000',
+                },
+              }}
+            />
           </Grid>
+
+          {userTypeCode === 'FACULTY' ? (
+            <Grid item xs={12} textAlign={'end'}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={courseData.description === description}
+                onClick={() => {
+                  updateCourseContent();
+                }}
+              >
+                {' '}
+                Update Content{' '}
+              </Button>
+            </Grid>
+          ) : null}
           <Grid item xs={12}>
             <Divider />
           </Grid>
@@ -134,9 +192,11 @@ const CourseDetails = () => {
 
             <Typography variant="h6">{courseData.semesterName}</Typography>
 
-            <Typography variant="body1" color="textSecondary">
-              Total Faculties: <b>{courseData.totalFaculties ? courseData.totalFaculties : 0}</b>
-            </Typography>
+            {userTypeCode === 'FACULTY' ? null : (
+              <Typography variant="body1" color="textSecondary">
+                Total Faculties: <b>{courseData.totalFaculties ? courseData.totalFaculties : 0}</b>
+              </Typography>
+            )}
 
             <Typography variant="body1" color="textSecondary">
               Total Students: <b>{courseData.totalStudents ? courseData.totalStudents : 0}</b>
@@ -161,37 +221,41 @@ const CourseDetails = () => {
             <Box my={2}></Box>
           </Grid>
 
-          <Grid item xs display={'flex'} justifyContent={'space-between'}>
-            <Box>
-              <Typography variant="h6">Faculty List</Typography>
-            </Box>
-            <Box>
-              <AddFaculty handleSubmit={addUserForCourse} />
-            </Box>
-          </Grid>
+          {userTypeCode === 'FACULTY' ? null : (
+            <>
+              <Grid item xs display={'flex'} justifyContent={'space-between'}>
+                <Box>
+                  <Typography variant="h6">Faculty List</Typography>
+                </Box>
+                <Box>
+                  <AddFaculty handleSubmit={addUserForCourse} />
+                </Box>
+              </Grid>
 
-          <Grid item xs={12}>
-            <DataGrid
-              rows={facultyList}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 10 },
-                },
-              }}
-              getRowId={(row) => row.userId}
-              getRowHeight={() => 'auto'}
-              sx={{
-                border: '1px solid #ccc',
-                // p: 1,
-                minHeight: '300px',
-                '& .MuiDataGrid-row': {
-                  borderTop: '1px solid #ccc', // Adds a border around each row
-                  py: 2,
-                },
-              }}
-            />
-          </Grid>
+              <Grid item xs={12}>
+                <DataGrid
+                  rows={facultyList}
+                  columns={columns}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 10 },
+                    },
+                  }}
+                  getRowId={(row) => row.userId}
+                  getRowHeight={() => 'auto'}
+                  sx={{
+                    border: '1px solid #ccc',
+                    // p: 1,
+                    minHeight: '300px',
+                    '& .MuiDataGrid-row': {
+                      borderTop: '1px solid #ccc', // Adds a border around each row
+                      py: 2,
+                    },
+                  }}
+                />
+              </Grid>
+            </>
+          )}
 
           <Grid item xs={12}>
             <Box my={2}></Box>

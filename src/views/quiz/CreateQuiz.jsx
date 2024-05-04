@@ -17,13 +17,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
 
-const CreateAssignment = () => {
+const CreateQuiz = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     date: null,
     point: '',
+    questions: '',
     courseId: '',
   });
 
@@ -40,7 +41,7 @@ const CreateAssignment = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:5000/create-assignment`, {
+    fetch(`http://localhost:5000/create-quiz`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -51,10 +52,10 @@ const CreateAssignment = () => {
       .then((data) => {
         if (data && data.status === 200) {
           navigate(-1);
-          alert('Assignment added!');
+          alert('Quiz added!');
         }
       })
-      .catch((error) => console.error('Error loading the assignment data:', error));
+      .catch((error) => console.error('Error loading the quiz data:', error));
   };
 
   useEffect(() => {
@@ -85,8 +86,8 @@ const CreateAssignment = () => {
   };
 
   return (
-    <PageContainer title="Create Assignment" description="Add a new assignment">
-      <DashboardCard title="New Assignment Form">
+    <PageContainer title="Create Quiz" description="Add a new assignment">
+      <DashboardCard title="Create Quiz">
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -109,7 +110,7 @@ const CreateAssignment = () => {
                 rows={4}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Due Date"
@@ -125,7 +126,7 @@ const CreateAssignment = () => {
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <TextField
                 required
                 fullWidth
@@ -135,7 +136,17 @@ const CreateAssignment = () => {
                 type="number"
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                required
+                fullWidth
+                label="Questions"
+                value={formData.questions}
+                onChange={handleChange('questions')}
+                type="number"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                 <InputLabel id="semester-select-label" required>
                   Course
@@ -163,7 +174,7 @@ const CreateAssignment = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2, width: 'auto' }} // Only take the width necessary for text
               >
-                Create Assignment
+                Create Quiz
               </Button>
             </Grid>
           </Grid>
@@ -173,4 +184,4 @@ const CreateAssignment = () => {
   );
 };
 
-export default CreateAssignment;
+export default CreateQuiz;

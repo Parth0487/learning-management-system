@@ -6,7 +6,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    userName: '',
+    email: '',
     password: '',
   });
 
@@ -26,9 +26,28 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data && data.status === 200) {
+        if (data && data.success) {
+          let userDetails = data.user;
           localStorage.setItem('userDetails', JSON.stringify(data.user));
+
+          if (userDetails.userTypeCode === 'ADMIN') {
+            navigate('/courses');
+            return;
+          }
+
+          if (userDetails.userTypeCode === 'STUDENT') {
+            navigate('/announcements');
+            return;
+          }
+
+          if (userDetails.userTypeCode === 'FACULTY') {
+            navigate('/');
+            return;
+          }
+
           navigate('/');
+        } else {
+          alert('Invalid Credentials');
         }
       })
       .catch((error) => console.error('Error loading the assignment data:', error));
@@ -51,9 +70,9 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
               <TextField
                 required
                 fullWidth
-                label="Username"
+                label="Email"
                 value={formData.title}
-                onChange={handleChange('userName')}
+                onChange={handleChange('email')}
                 margin="normal"
               />
             </Grid>

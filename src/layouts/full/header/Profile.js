@@ -11,6 +11,7 @@ import {
   ListItemText,
   Typography,
   Chip,
+  Divider,
 } from '@mui/material';
 
 import { IconListCheck, IconMail, IconUser } from '@tabler/icons';
@@ -22,6 +23,10 @@ import AdminImg from 'src/assets/images/profile/admin.png';
 import FacultyImg from 'src/assets/images/profile/faculty.png';
 
 const Profile = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null } = userDetails;
+
   const navigate = useNavigate();
   const [anchorEl2, setAnchorEl2] = useState(null);
   const [user, setUser] = useState({});
@@ -39,18 +44,18 @@ const Profile = () => {
 
   const getUserType = () => {
     if (user && user.userTypeCode === 'ADMIN') {
-      return <Chip variant="outlined" label={user.userTypeCode} color="primary" />;
+      return <Chip variant="filled" label={user.userTypeCode} color="primary" />;
     }
 
     if (user && user.userTypeCode === 'FACULTY') {
-      return <Chip variant="outlined" label={user.userTypeCode} color="secondary" />;
+      return <Chip variant="filled" label={user.userTypeCode} color="warning" />;
     }
 
     if (user && user.userTypeCode === 'STUDENT') {
-      return <Chip variant="outlined" label={user.userTypeCode} color="success" />;
+      return <Chip variant="filled" label={user.userTypeCode} color="success" />;
     }
 
-    return <Chip variant="outlined" label="Unknown" color="success" />;
+    return <Chip variant="filled" label="Unknown" color="success" />;
   };
 
   const getUserTypeIcon = () => {
@@ -80,11 +85,11 @@ const Profile = () => {
         sx={{
           ...(typeof anchorEl2 === 'object' && {
             color: 'primary.main',
+            border: '1px solid lightgrey',
           }),
         }}
         onClick={handleClick2}
       >
-        {/* <Typography>{user.userName}</Typography> */}
         <Avatar
           src={getUserTypeIcon()}
           alt={getUserTypeIcon()}
@@ -94,9 +99,7 @@ const Profile = () => {
           }}
         />
       </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
+
       <Menu
         id="msgs-menu"
         anchorEl={anchorEl2}
@@ -108,33 +111,48 @@ const Profile = () => {
         sx={{
           '& .MuiMenu-paper': {
             width: '250px',
+            border: '1px solid lightgrey',
           },
         }}
       >
-        {/* <Box mt={1} py={1} px={2}>
-          <Typography align="center">Account Type: &nbsp; {getUserType()}</Typography>
-        </Box> */}
-        <MenuItem onClick={() => navigate('/profile')}>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
+        <MenuItem
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          {/* <ListItemIcon>
+              <IconUser width={20} />
+            </ListItemIcon> */}
+          <Typography>Login Type</Typography>
+          <b>{getUserType()}</b>
         </MenuItem>
-        {/* <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem> */}
-        {/* <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem> */}
+
+        <Divider />
+        {userTypeCode === 'STUDENT' ? (
+          <MenuItem
+            onClick={() => {
+              navigate('/profile');
+            }}
+          >
+            <ListItemIcon>
+              <IconUser width={20} />
+            </ListItemIcon>
+            <ListItemText>My Profile</ListItemText>
+          </MenuItem>
+        ) : null}
 
         <Box mt={1} py={1} px={2}>
-          <Button to="/auth/login" variant="outlined" color="primary" component={Link} fullWidth>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              localStorage.removeItem('userDetails');
+              navigate('/auth/login');
+              window.location.reload();
+            }}
+          >
             Logout
           </Button>
         </Box>

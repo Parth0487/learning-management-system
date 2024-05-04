@@ -7,61 +7,89 @@ import {
   IconUser,
   IconFileDescription,
   IconFile,
+  IconUserPlus,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
 
 const userDetails = JSON.parse(localStorage.getItem('userDetails'));
-console.log('USER: ', userDetails);
 
-const Menuitems = [
-  {
-    id: uniqueId(),
-    title: 'Dashboard',
-    icon: IconLayoutDashboard,
-    href: '/dashboard',
-  },
+const { userTypeCode = null } = userDetails;
 
-  {
-    id: uniqueId(),
-    title: 'Assignments',
-    icon: IconFile,
-    href: '/assignments',
-  },
+let MenuItems = [];
 
-  {
-    id: uniqueId(),
-    title: 'Quiz',
-    icon: IconTextSpellcheck,
-    href: '/quiz',
-  },
+if (userTypeCode === 'ADMIN') {
+  MenuItems = [
+    {
+      id: uniqueId(),
+      title: 'Courses',
+      icon: IconFileDescription,
+      href: '/courses',
+    },
+    {
+      id: uniqueId(),
+      title: 'Create User',
+      icon: IconUserPlus,
+      href: '/create-user',
+    },
+  ];
+}
 
-  {
-    id: uniqueId(),
-    title: 'Announcements',
-    icon: IconSpeakerphone,
-    href: '/announcements',
-  },
+if (userTypeCode === 'FACULTY') {
+  MenuItems = [
+    {
+      id: uniqueId(),
+      title: 'Dashboard',
+      icon: IconLayoutDashboard,
+      href: '/dashboard',
+    },
 
-  {
-    id: uniqueId(),
-    title: 'Grades',
-    icon: IconTable,
-    href: '/grades',
-  },
+    {
+      id: uniqueId(),
+      title: 'Assignments',
+      icon: IconFile,
+      href: '/assignments',
+    },
 
-  // {
-  //   id: uniqueId(),
-  //   title: 'Students',
-  //   icon: IconUser,
-  //   href: '/students',
-  // },
-  {
-    id: uniqueId(),
-    title: 'Courses',
-    icon: IconFileDescription,
-    href: '/courses',
-  },
-];
+    {
+      id: uniqueId(),
+      title: 'Announcements',
+      icon: IconSpeakerphone,
+      href: '/announcements',
+    },
 
-export default Menuitems;
+    {
+      id: uniqueId(),
+      title: 'Quiz',
+      icon: IconTextSpellcheck,
+      href: '/quiz',
+    },
+  ];
+}
+
+if (userTypeCode === 'STUDENT') {
+  MenuItems = [
+    {
+      id: uniqueId(),
+      title: 'Announcements',
+      icon: IconSpeakerphone,
+      href: '/announcements',
+    },
+
+    {
+      id: uniqueId(),
+      title: 'Grades',
+      icon: IconTable,
+      href: '/grades',
+    },
+
+    {
+      id: uniqueId(),
+      title: 'Courses',
+      icon: IconFileDescription,
+      href: '/courses',
+    },
+  ];
+}
+
+export default MenuItems;

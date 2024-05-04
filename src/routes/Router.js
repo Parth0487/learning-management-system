@@ -16,8 +16,12 @@ const CreateAssignment = Loadable(lazy(() => import('../views/assignments/Create
 
 const Quiz = Loadable(lazy(() => import('../views/quiz/quiz')));
 const QuizDetails = Loadable(lazy(() => import('../views/quiz/QuizDetails')));
+const CreateQuiz = Loadable(lazy(() => import('../views/quiz/CreateQuiz')));
 
 const Announcement = Loadable(lazy(() => import('../views/announcements/announcments')));
+const CreateAnnouncement = Loadable(
+  lazy(() => import('../views/announcements/CreateAnnouncement')),
+);
 const AnnouncementDetails = Loadable(
   lazy(() => import('../views/announcements/AnnouncementDetails')),
 );
@@ -31,23 +35,30 @@ const CourseDetails = Loadable(lazy(() => import('../views/courses/CourseDetails
 
 const Students = Loadable(lazy(() => import('../views/students/students')));
 
+const CreateUser = Loadable(lazy(() => import('../views/createUser/createUser')));
+
 const Router = [
   {
     path: '/',
     element: <FullLayout />,
     children: [
       { path: '/', element: <Navigate to="/dashboard" /> },
+
       { path: '/dashboard', exact: true, element: <Dashboard /> },
+      { path: '/dashboard/view-course/:id', exact: true, element: <CourseDetails /> },
+
+      { path: '/create-user', exact: true, element: <CreateUser /> },
 
       { path: '/assignments', exact: false, element: <Assignments /> },
       { path: '/assignments/view/:id', exact: false, element: <AssignmentDetails /> },
       { path: '/assignments/create', exact: false, element: <CreateAssignment /> },
 
       { path: '/quiz', exact: false, element: <Quiz /> },
+      { path: '/quiz/create', exact: false, element: <CreateQuiz /> },
       { path: '/quiz/view/:id', exact: false, element: <QuizDetails /> },
 
       { path: '/announcements', exact: false, element: <Announcement /> },
-      { path: '/announcements/:id', exact: false, element: <AnnouncementDetails /> },
+      { path: '/announcements/create', exact: false, element: <CreateAnnouncement /> },
 
       { path: '/grades', exact: false, element: <Grades /> },
 

@@ -16,6 +16,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 
 const Course = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null } = userDetails;
   const [tableData, setTableData] = useState([]);
 
   const [semesterList, setSemesterList] = useState([]);
@@ -138,31 +141,33 @@ const Course = () => {
     <PageContainer title="Courses" description="this is Sample page">
       <DashboardCard title="Courses">
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-              <InputLabel id="faculty-select-label">Faculty</InputLabel>
-              <Select
-                labelId="faculty-select-label"
-                id="faculty-select"
-                multiple
-                value={filters.faculty}
-                onChange={(e) =>
-                  setFilters({
-                    ...filters,
-                    faculty: e.target.value,
-                  })
-                }
-                input={<OutlinedInput label="Faculty" />}
-                // renderValue={(selected) => selected.join(', ')}
-              >
-                {facultyList.map((faculty) => (
-                  <MenuItem key={faculty.id} value={faculty.id}>
-                    {faculty.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          {userTypeCode === 'FACULTY' ? null : (
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                <InputLabel id="faculty-select-label">Faculty</InputLabel>
+                <Select
+                  labelId="faculty-select-label"
+                  id="faculty-select"
+                  multiple
+                  value={filters.faculty}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      faculty: e.target.value,
+                    })
+                  }
+                  input={<OutlinedInput label="Faculty" />}
+                  // renderValue={(selected) => selected.join(', ')}
+                >
+                  {facultyList.map((faculty) => (
+                    <MenuItem key={faculty.id} value={faculty.id}>
+                      {faculty.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
 
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>

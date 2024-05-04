@@ -1,106 +1,221 @@
-import React from 'react';
-import { Grid, Box, Card, CardContent, Typography, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Typography,
+} from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
+import DashboardCard from '../../components/shared/DashboardCard';
+import { DataGrid } from '@mui/x-data-grid';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const upcomingEvents = [
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const [tableData, setTableData] = useState([]);
+
+  const [semesterList, setSemesterList] = useState([]);
+  const [facultyList, setFacultyList] = useState([]);
+
+  const [filters, setFilters] = useState({
+    faculty: [],
+    semester: [],
+  });
+
+  useEffect(() => {
+    // fetchFaculties();
+    fetchSemesters();
+
+    setFilters({
+      ...filters,
+      faculty: [userDetails.userId],
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [filters]);
+
+  const fetchCourses = async () => {
+    fetch('http://localhost:5000/course', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify(filters),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.length) {
+          let list = data.map((i) => {
+            return { ...i, id: i.courseId };
+          });
+
+          setTableData(list);
+        } else {
+          setTableData([]);
+        }
+      });
+  };
+
+  const fetchFaculties = async () => {
+    fetch('http://localhost:5000/faculty', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let list = data.map((i) => {
+          return { ...i, id: i.userId };
+        });
+
+        setFacultyList(list);
+      });
+  };
+
+  const fetchSemesters = async () => {
+    fetch('http://localhost:5000/semester', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let list = data.map((i) => {
+          return { ...i, id: i.semesterId };
+        });
+
+        setSemesterList(list);
+      });
+  };
+
+  const columns = [
     {
-      title: 'Quiz: Software Design Patterns',
-      date: 'May 15, 2024',
-      details: 'Covering basic to advanced design patterns.',
+      field: 'courseId',
+      headerName: 'ID',
+      width: 50,
     },
     {
-      title: 'Assignment: Software Testing Techniques',
-      date: 'May 22, 2024',
-      details: 'Focus on unit and integration testing.',
+      field: 'title',
+      headerName: 'Course',
+      minWidth: 250,
+      renderCell: (params) => (
+        <Typography
+          fontSize={13}
+          variant="body1"
+          textAlign="right"
+          component={Link}
+          to={`/dashboard/view-course/${params.row.courseId}`}
+          sx={{ color: '#000' }}
+        >
+          {params.row.title}
+        </Typography>
+      ),
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      flex: 1,
+    },
+
+    {
+      field: 'isPublished',
+      headerName: 'Status',
+      renderCell: (params) => {
+        return (
+          <>
+            <Chip
+              label={params.row.isPublished === 'yes' ? 'Published' : 'Not Published'}
+              color={params.row.isPublished === 'yes' ? 'primary' : 'error'}
+              size="small"
+            />
+          </>
+        );
+      },
+      width: 140,
     },
   ];
-
-  const recentNews = [
-    {
-      title: 'Guest Lecture',
-      date: 'June 10, 2024',
-      details: 'Topic: Agile Methodologies with industry experts.',
-    },
-    {
-      title: 'Hackathon',
-      date: 'July 5, 2024',
-      details: 'Annual hackathon with a focus on open-source contributions.',
-    },
-  ];
-
-  const tasks = [
-    {
-      title: 'Complete Project Proposal',
-      dueDate: 'May 30, 2024',
-      details: 'Proposals for the end-of-semester projects are due.',
-    },
-  ];
-
-  const achievements = [
-    {
-      title: 'CodeFest Winners',
-      date: 'April 2024',
-      details: 'Congratulations to the winning team of this year’s CodeFest!',
-    },
-  ];
-
-  const renderCards = (data) =>
-    data.map((item, index) => (
-      <Grid item xs={12} sm={6} md={4} key={index}>
-        <Card raised>
-          <CardContent>
-            <Typography variant="h5" color="primary">
-              {item.title}
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography variant="body1">{item.details}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              Date: <b>{item.date || item.dueDate}</b>
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-    ));
 
   return (
-    <PageContainer title="Dashboard" description="this is Dashboard">
-      <Box>
+    <PageContainer title="My Courses" description="this is Sample page">
+      <DashboardCard title="My Courses">
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Upcoming Events
-            </Typography>
-            <Grid container spacing={2}>
-              {renderCards(upcomingEvents)}
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Tasks To Complete
-            </Typography>
-            <Grid container spacing={2}>
-              {renderCards(tasks)}
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Recent News
-            </Typography>
-            <Grid container spacing={2}>
-              {renderCards(recentNews)}
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Recent Achievements
-            </Typography>
-            <Grid container spacing={2}>
-              {renderCards(achievements)}
-            </Grid>
+          {/* <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel id="faculty-select-label">Faculty</InputLabel>
+              <Select
+                labelId="faculty-select-label"
+                id="faculty-select"
+                multiple
+                value={filters.faculty}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    faculty: e.target.value,
+                  })
+                }
+                input={<OutlinedInput label="Faculty" />}
+                // renderValue={(selected) => selected.join(', ')}
+              >
+                {facultyList.map((faculty) => (
+                  <MenuItem key={faculty.id} value={faculty.id}>
+                    {faculty.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid> */}
+
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel id="semester-select-label">Semester</InputLabel>
+              <Select
+                labelId="semester-select-label"
+                id="semester-select"
+                multiple
+                value={filters.semester}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    semester: e.target.value,
+                  })
+                }
+                input={<OutlinedInput label="Semester" />}
+              >
+                {semesterList.map((semester) => (
+                  <MenuItem key={semester.id} value={semester.id}>
+                    {semester.semesterName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
-      </Box>
+        <Box my={1}></Box>
+        <DataGrid
+          rows={tableData}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          getRowId={(row) => row.courseId}
+          getRowHeight={() => 'auto'}
+          sx={{
+            border: '1px solid #ccc',
+            // p: 1,
+            minHeight: '300px',
+            '& .MuiDataGrid-row': {
+              borderTop: '1px solid #ccc', // Adds a border around each row
+              py: 2,
+            },
+          }}
+        />
+      </DashboardCard>
     </PageContainer>
   );
 };
