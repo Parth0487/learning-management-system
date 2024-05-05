@@ -61,8 +61,15 @@ This React application, Learning Management System, is designed to facilitate ed
 
 2. Install dependencies:
 
-cd learning-management-system
-npm install
+   ```bash
+   cd learning-management-system
+   npm install
+
+   ```
 
 3. Start the development server:
+
+   ```bash
    npm start
+
+   ```
