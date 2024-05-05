@@ -5,6 +5,8 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import { useParams } from 'react-router-dom'; // Correct import for useParams
 import moment from 'moment'; // Ensure moment is installed or use native Date methods
 
+const { REACT_APP_API } = process.env;
+
 const QuizDetails = () => {
   const { id: quizId = 1 } = useParams();
   const [quiz, setQuiz] = useState({});
@@ -14,7 +16,7 @@ const QuizDetails = () => {
   }, []);
 
   const fetchQuizDetails = async () => {
-    fetch(`http://localhost:5000/quiz/${quizId}`, {
+    fetch(`${REACT_APP_API}/quiz/${quizId}`, {
       method: 'GET',
     })
       .then((response) => response.json())

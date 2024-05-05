@@ -12,6 +12,8 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
 
+const { REACT_APP_API } = process.env;
+
 const Assignments = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
@@ -32,7 +34,7 @@ const Assignments = () => {
   }, []);
 
   const fetchAssignments = async () => {
-    fetch('http://localhost:5000/assignment', {
+    fetch(`${REACT_APP_API}/assignment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

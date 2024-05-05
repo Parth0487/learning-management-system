@@ -5,6 +5,8 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 
+const { REACT_APP_API } = process.env;
+
 const Quiz = () => {
   const [tableData, setTableData] = useState([]);
 
@@ -15,7 +17,7 @@ const Quiz = () => {
   const fetchQuizList = async () => {
     let userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
-    fetch('http://localhost:5000/score', {
+    fetch(`${REACT_APP_API}/score`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

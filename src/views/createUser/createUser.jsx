@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
 
+const { REACT_APP_API } = process.env;
+
 const userTypeList = [
   {
     label: 'FACULTY',
@@ -46,7 +48,7 @@ const CreateUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:5000/user`, {
+    fetch(`${REACT_APP_API}/user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -74,7 +76,7 @@ const CreateUser = () => {
   }, []);
 
   const fetchCourseList = async () => {
-    fetch('http://localhost:5000/course', {
+    fetch(`${REACT_APP_API}/course`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

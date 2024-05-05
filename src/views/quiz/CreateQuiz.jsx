@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
 
+const { REACT_APP_API } = process.env;
+
 const CreateQuiz = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -41,7 +43,7 @@ const CreateQuiz = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:5000/create-quiz`, {
+    fetch(`${REACT_APP_API}/create-quiz`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -63,7 +65,7 @@ const CreateQuiz = () => {
   }, []);
 
   const fetchCourseList = async () => {
-    fetch('http://localhost:5000/course', {
+    fetch(`${REACT_APP_API}/course`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

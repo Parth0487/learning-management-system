@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
+const { REACT_APP_API } = process.env;
 
 const AddFaculty = ({ handleSubmit }) => {
   const { id: courseId = 1 } = useParams();
@@ -34,7 +35,7 @@ const AddFaculty = ({ handleSubmit }) => {
   }, []);
 
   const fetchCourseFacultyList = async () => {
-    fetch(`http://localhost:5000/faculty-by-course/${courseId}?includeFaculty=yes`, {
+    fetch(`${REACT_APP_API}/faculty-by-course/${courseId}?includeFaculty=yes`, {
       method: 'GET',
     })
       .then((response) => response.json())

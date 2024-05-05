@@ -15,6 +15,8 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 
+const { REACT_APP_API } = process.env;
+
 const Dashboard = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
@@ -43,7 +45,7 @@ const Dashboard = () => {
   }, [filters]);
 
   const fetchCourses = async () => {
-    fetch('http://localhost:5000/course', {
+    fetch(`${REACT_APP_API}/course`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -65,7 +67,7 @@ const Dashboard = () => {
   };
 
   const fetchFaculties = async () => {
-    fetch('http://localhost:5000/faculty', {
+    fetch(`${REACT_APP_API}/faculty`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -79,7 +81,7 @@ const Dashboard = () => {
   };
 
   const fetchSemesters = async () => {
-    fetch('http://localhost:5000/semester', {
+    fetch(`${REACT_APP_API}/semester`, {
       method: 'GET',
     })
       .then((response) => response.json())

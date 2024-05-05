@@ -20,6 +20,8 @@ import moment from 'moment';
 import { DataGrid } from '@mui/x-data-grid';
 import { IconPlus } from '@tabler/icons';
 
+const { REACT_APP_API } = process.env;
+
 const AddStudent = ({ handleSubmit }) => {
   const { id: courseId = 1 } = useParams();
 
@@ -39,7 +41,7 @@ const AddStudent = ({ handleSubmit }) => {
   }, [open]);
 
   const fetchCourseStudentList = async () => {
-    fetch(`http://localhost:5000/student-by-course/${courseId}?includeStudent=yes`, {
+    fetch(`${REACT_APP_API}/student-by-course/${courseId}?includeStudent=yes`, {
       method: 'GET',
     })
       .then((response) => response.json())

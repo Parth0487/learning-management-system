@@ -16,6 +16,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
+const { REACT_APP_API } = process.env;
 
 const CreateAssignment = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const CreateAssignment = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:5000/create-assignment`, {
+    fetch(`${REACT_APP_API}/create-assignment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -62,7 +63,7 @@ const CreateAssignment = () => {
   }, []);
 
   const fetchCourseList = async () => {
-    fetch('http://localhost:5000/course', {
+    fetch(`${REACT_APP_API}/course`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

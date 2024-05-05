@@ -9,6 +9,8 @@ import { IconPlus } from '@tabler/icons';
 import AddStudent from './AddStudent';
 import AddFaculty from './AddFaculty';
 
+const { REACT_APP_API } = process.env;
+
 const CourseDetails = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
@@ -59,7 +61,7 @@ const CourseDetails = () => {
   };
 
   const fetchCourseDetails = async () => {
-    fetch(`http://localhost:5000/course/${courseId}`, {
+    fetch(`${REACT_APP_API}/course/${courseId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -71,7 +73,7 @@ const CourseDetails = () => {
   };
 
   const fetchCourseStudentList = async () => {
-    fetch(`http://localhost:5000/student-by-course/${courseId}`, {
+    fetch(`${REACT_APP_API}/student-by-course/${courseId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -82,7 +84,7 @@ const CourseDetails = () => {
   };
 
   const fetchCourseFecultyList = async () => {
-    fetch(`http://localhost:5000/faculty-by-course/${courseId}`, {
+    fetch(`${REACT_APP_API}/faculty-by-course/${courseId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -100,7 +102,7 @@ const CourseDetails = () => {
         courseId,
       };
 
-      fetch(`http://localhost:5000/add-user-to-course`, {
+      fetch(`${REACT_APP_API}/add-user-to-course`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Set the content type header
@@ -118,7 +120,7 @@ const CourseDetails = () => {
   const updateCourseContent = () => {
     let req = { description };
 
-    fetch(`http://localhost:5000/course/${courseId}`, {
+    fetch(`${REACT_APP_API}/course/${courseId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

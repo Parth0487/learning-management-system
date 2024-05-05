@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Stack, TextField, Grid, Divider } from '@mui/material';
 import { useNavigate } from 'react-router';
+const { REACT_APP_API } = process.env;
 
 const AuthLogin = ({ title, subtitle, subtext }) => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
     event.preventDefault();
     console.log(formData); // Implement your submit logic here
 
-    fetch(`http://localhost:5000/user/login`, {
+    fetch(`${REACT_APP_API}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

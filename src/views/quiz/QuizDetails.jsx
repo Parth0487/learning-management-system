@@ -17,6 +17,8 @@ import { useParams } from 'react-router-dom'; // Correct import for useParams
 import moment from 'moment'; // Ensure moment is installed or use native Date methods
 import { DataGrid } from '@mui/x-data-grid';
 
+const { REACT_APP_API } = process.env;
+
 const QuizDetails = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
   const { userTypeCode = null, userId } = userDetails;
@@ -38,7 +40,7 @@ const QuizDetails = () => {
   }, [quiz]);
 
   const fetchQuizDetails = async () => {
-    fetch(`http://localhost:5000/quiz/${quizId}`, {
+    fetch(`${REACT_APP_API}/quiz/${quizId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -50,7 +52,7 @@ const QuizDetails = () => {
   };
 
   const fetchStudentsForCourse = (courseId) => {
-    fetch(`http://localhost:5000/student-score-list`, {
+    fetch(`${REACT_APP_API}/student-score-list`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -124,7 +126,7 @@ const QuizDetails = () => {
 
     try {
       // Call your API here. This is a placeholder for your API endpoint and method.
-      fetch(`http://localhost:5000/update-score`, {
+      fetch(`${REACT_APP_API}/update-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +156,7 @@ const QuizDetails = () => {
   };
 
   const handlePublishChange = (event) => {
-    fetch(`http://localhost:5000/quiz/${quizId}`, {
+    fetch(`${REACT_APP_API}/quiz/${quizId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -175,7 +177,7 @@ const QuizDetails = () => {
   const updateContent = () => {
     let req = { description, type: 'quiz', id: quizId };
 
-    fetch(`http://localhost:5000/update-content`, {
+    fetch(`${REACT_APP_API}/update-content`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

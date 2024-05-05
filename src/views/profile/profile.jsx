@@ -19,6 +19,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SchoolIcon from '@mui/icons-material/School';
 import moment from 'moment';
 
+const { REACT_APP_API } = process.env;
+
 const MyProfile = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
@@ -55,7 +57,7 @@ const MyProfile = () => {
 
   const handleUpdateProfile = async () => {
     // API call to update the user profile
-    await fetch('http://localhost:5000/user', {
+    await fetch(`${REACT_APP_API}/user`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ const MyProfile = () => {
 
   const fetchStudentProfileAPI = async () => {
     // API call to update the user profile
-    await fetch(`http://localhost:5000/user/get-user-by-id/${userId}`, {
+    await fetch(`${REACT_APP_API}/user/get-user-by-id/${userId}`, {
       method: 'GET',
     })
       .then((response) => response.json())

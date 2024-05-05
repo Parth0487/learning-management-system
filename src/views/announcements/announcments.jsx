@@ -6,6 +6,8 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
 
+const { REACT_APP_API } = process.env;
+
 const Announcement = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
@@ -18,7 +20,7 @@ const Announcement = () => {
   }, []);
 
   const fetchAnnouncementList = async () => {
-    fetch('http://localhost:5000/announcement', {
+    fetch(`${REACT_APP_API}/announcement`, {
       method: 'GET',
     })
       .then((response) => response.json())

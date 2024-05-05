@@ -17,6 +17,7 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import { useParams } from 'react-router';
 import moment from 'moment'; // Ensure moment is installed or use native Date methods
 import { DataGrid } from '@mui/x-data-grid';
+const { REACT_APP_API } = process.env;
 
 const AssignmentDetails = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
@@ -42,7 +43,7 @@ const AssignmentDetails = () => {
   }, [assignment]);
 
   const fetchAssignmentDetails = async () => {
-    fetch(`http://localhost:5000/assignment/${assignmentId}`, {
+    fetch(`${REACT_APP_API}/assignment/${assignmentId}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -54,7 +55,7 @@ const AssignmentDetails = () => {
   };
 
   const fetchStudentsForCourse = (courseId) => {
-    fetch(`http://localhost:5000/student-score-list`, {
+    fetch(`${REACT_APP_API}/student-score-list`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -75,7 +76,7 @@ const AssignmentDetails = () => {
   const publishAssignment = async () => {
     let status = assignment.isPublished === 'yes' ? 'no' : 'yes';
 
-    fetch(`http://localhost:5000/publish-assignment/${assignmentId}`, {
+    fetch(`${REACT_APP_API}/publish-assignment/${assignmentId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
@@ -93,7 +94,7 @@ const AssignmentDetails = () => {
   };
 
   const handlePublishChange = (event) => {
-    fetch(`http://localhost:5000/assignment/${assignmentId}`, {
+    fetch(`${REACT_APP_API}/assignment/${assignmentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -169,7 +170,7 @@ const AssignmentDetails = () => {
 
     try {
       // Call your API here. This is a placeholder for your API endpoint and method.
-      fetch(`http://localhost:5000/update-score`, {
+      fetch(`${REACT_APP_API}/update-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -201,7 +202,7 @@ const AssignmentDetails = () => {
   const updateContent = () => {
     let req = { description, type: 'assignment', id: assignmentId };
 
-    fetch(`http://localhost:5000/update-content`, {
+    fetch(`${REACT_APP_API}/update-content`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json', // Set the content type header

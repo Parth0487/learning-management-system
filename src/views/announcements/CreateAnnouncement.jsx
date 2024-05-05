@@ -17,6 +17,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
 import moment from 'moment';
+const { REACT_APP_API } = process.env;
 
 const CreateAnnouncement = () => {
   const userDetails = JSON.parse(localStorage.getItem('userDetails'));
@@ -43,7 +44,7 @@ const CreateAnnouncement = () => {
       createdBy: userId,
     };
 
-    fetch(`http://localhost:5000/announcement`, {
+    fetch(`${REACT_APP_API}/announcement`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
