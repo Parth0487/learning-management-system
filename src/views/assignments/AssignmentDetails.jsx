@@ -19,11 +19,17 @@ import moment from 'moment'; // Ensure moment is installed or use native Date me
 import { DataGrid } from '@mui/x-data-grid';
 
 const AssignmentDetails = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+  const { userTypeCode = null } = userDetails;
+
   const params = useParams();
   const { id: assignmentId = 1 } = params;
   const [assignment, setAssignment] = useState({});
 
   const [studentList, setStudentList] = useState({});
+
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     fetchAssignmentDetails();
@@ -41,6 +47,7 @@ const AssignmentDetails = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setDescription(data.description);
         setAssignment(data);
       })
       .catch((error) => console.error('Error loading the assignment data:', error));
@@ -191,15 +198,70 @@ const AssignmentDetails = () => {
     }
   };
 
+  const updateContent = () => {
+    let req = { description, type: 'assignment', id: assignmentId };
+
+    fetch(`http://localhost:5000/update-content`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify(req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.success) {
+          alert('Content Updated!');
+        }
+
+        fetchAssignmentDetails();
+      })
+      .catch((error) => console.error('Error loading the course data:', error));
+  };
+
   return (
     <PageContainer title="Assignment Details" description="Detailed view of assignment">
       <DashboardCard title="Assignment Details">
         <Typography variant="h5" gutterBottom>
           {assignment.title || 'No title available'}
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Grid item xs={12}>
+          {/* <Typography variant="body1" gutterBottom>
+              {courseData.description || 'No description available'}
+            </Typography> */}
+          <Typography>Content</Typography>
+          <TextField
+            fullWidth
+            value={description}
+            multiline
+            rows={20}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={!(userTypeCode === 'FACULTY')}
+            sx={{
+              '& .MuiInputBase-input.Mui-disabled': {
+                WebkitTextFillColor: '#000000',
+              },
+            }}
+          />
+        </Grid>
+        {userTypeCode === 'FACULTY' ? (
+          <Grid item xs={12} textAlign={'end'} mt={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={assignment.description === description}
+              onClick={() => {
+                updateContent();
+              }}
+            >
+              {' '}
+              Update Content{' '}
+            </Button>
+          </Grid>
+        ) : null}
+        {/* <Typography variant="body1" gutterBottom>
           {assignment.description || 'No description available'}
-        </Typography>
+        </Typography> */}
         <Divider style={{ margin: '20px 0' }} />
         <Typography variant="body2" color="textSecondary" gutterBottom>
           Due: {assignment.date ? moment(assignment.date).format('MMMM Do YYYY') : 'No due date'}
@@ -215,13 +277,15 @@ const AssignmentDetails = () => {
           </Typography>
         )}
         <Divider style={{ margin: '20px 0' }} />
-        <FormControlLabel
-          control={
-            <Switch checked={assignment.isPublished === 'yes'} onChange={handlePublishChange} />
-          }
-          label={assignment.isPublished === 'yes' ? 'Published' : 'Not Published'}
-          disabled={!isUpcoming(assignment.date)}
-        />
+        {['STUDENT'].includes(userTypeCode) ? null : (
+          <FormControlLabel
+            control={
+              <Switch checked={assignment.isPublished === 'yes'} onChange={handlePublishChange} />
+            }
+            label={assignment.isPublished === 'yes' ? 'Published' : 'Not Published'}
+            disabled={!isUpcoming(assignment.date)}
+          />
+        )}
         <Typography variant="body1">
           Additional details like submission guidelines, grading criteria, and resource materials
           can be added here. This text serves as placeholder content to fill the page and offer a
@@ -239,43 +303,45 @@ const AssignmentDetails = () => {
             <Button variant="contained">Assign Grades</Button>
           </Grid>
         </Grid> */}
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Box>
-              <Typography variant="h6">Student List</Typography>
-            </Box>
-          </Grid>
+        {['STUDENT'].includes(userTypeCode) ? null : (
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Box>
+                <Typography variant="h6">Student List</Typography>
+              </Box>
+            </Grid>
 
-          <Grid item xs={12}>
-            <DataGrid
-              rows={studentList}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 10 },
-                },
-              }}
-              getRowId={(row) => row.userId}
-              getRowHeight={() => 'auto'}
-              sx={{
-                border: '1px solid #ccc',
-                // p: 1,
-                minHeight: '300px',
-                '& .MuiDataGrid-row': {
-                  borderTop: '1px solid #ccc', // Adds a border around each row
-                  py: 2,
-                },
-                '& .MuiDataGrid-cell:focus-within': {
-                  outline: 'none', // Disables the blue outline on cell focus
-                },
-                // Optional: you can also apply a style to prevent the input from showing a focus outline
-                // '& input:focus': {
-                //   outline: 'none', // This will prevent the text field from showing an outline when focused
-                // },
-              }}
-            />
+            <Grid item xs={12}>
+              <DataGrid
+                rows={studentList}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 10 },
+                  },
+                }}
+                getRowId={(row) => row.userId}
+                getRowHeight={() => 'auto'}
+                sx={{
+                  border: '1px solid #ccc',
+                  // p: 1,
+                  minHeight: '300px',
+                  '& .MuiDataGrid-row': {
+                    borderTop: '1px solid #ccc', // Adds a border around each row
+                    py: 2,
+                  },
+                  '& .MuiDataGrid-cell:focus-within': {
+                    outline: 'none', // Disables the blue outline on cell focus
+                  },
+                  // Optional: you can also apply a style to prevent the input from showing a focus outline
+                  // '& input:focus': {
+                  //   outline: 'none', // This will prevent the text field from showing an outline when focused
+                  // },
+                }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </DashboardCard>
     </PageContainer>
   );

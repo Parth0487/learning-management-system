@@ -49,7 +49,14 @@ const Course = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data && data.length) {
-          let list = data.map((i) => {
+          let courseList = data;
+
+          if (userTypeCode === 'STUDENT') {
+            courseList = data.filter((i) => i.isPublished === 'yes');
+            console.log('courseList: ', courseList);
+          }
+
+          let list = courseList.map((i) => {
             return { ...i, id: i.courseId };
           });
 
@@ -141,7 +148,7 @@ const Course = () => {
     <PageContainer title="Courses" description="this is Sample page">
       <DashboardCard title="Courses">
         <Grid container spacing={3}>
-          {userTypeCode === 'FACULTY' ? null : (
+          {['FACULTY', 'STUDENT'].includes(userTypeCode) ? null : (
             <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                 <InputLabel id="faculty-select-label">Faculty</InputLabel>

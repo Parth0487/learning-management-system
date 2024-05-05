@@ -192,15 +192,17 @@ const CourseDetails = () => {
 
             <Typography variant="h6">{courseData.semesterName}</Typography>
 
-            {userTypeCode === 'FACULTY' ? null : (
+            {['STUDENT', 'FACULTY'].includes(userTypeCode) ? null : (
               <Typography variant="body1" color="textSecondary">
                 Total Faculties: <b>{courseData.totalFaculties ? courseData.totalFaculties : 0}</b>
               </Typography>
             )}
 
-            <Typography variant="body1" color="textSecondary">
-              Total Students: <b>{courseData.totalStudents ? courseData.totalStudents : 0}</b>
-            </Typography>
+            {['STUDENT'].includes(userTypeCode) ? null : (
+              <Typography variant="body1" color="textSecondary">
+                Total Students: <b>{courseData.totalStudents ? courseData.totalStudents : 0}</b>
+              </Typography>
+            )}
           </Grid>
 
           <Grid item xs={12}>
@@ -221,7 +223,7 @@ const CourseDetails = () => {
             <Box my={2}></Box>
           </Grid>
 
-          {userTypeCode === 'FACULTY' ? null : (
+          {['FACULTY', 'STUDENT'].includes(userTypeCode) ? null : (
             <>
               <Grid item xs display={'flex'} justifyContent={'space-between'}>
                 <Box>
@@ -261,40 +263,44 @@ const CourseDetails = () => {
             <Box my={2}></Box>
           </Grid>
 
-          <Grid item xs display={'flex'} justifyContent={'space-between'}>
-            <Box>
-              <Typography variant="h6">Student List</Typography>
-            </Box>
-            <Box>
-              {/* <Button variant="contained" color="primary" startIcon={<IconPlus />}>
+          {['STUDENT'].includes(userTypeCode) ? null : (
+            <>
+              <Grid item xs display={'flex'} justifyContent={'space-between'}>
+                <Box>
+                  <Typography variant="h6">Student List</Typography>
+                </Box>
+                <Box>
+                  {/* <Button variant="contained" color="primary" startIcon={<IconPlus />}>
                 Add Student
               </Button> */}
-              <AddStudent handleSubmit={addUserForCourse} />
-            </Box>
-          </Grid>
+                  <AddStudent handleSubmit={addUserForCourse} />
+                </Box>
+              </Grid>
 
-          <Grid item xs={12}>
-            <DataGrid
-              rows={studentList}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 10 },
-                },
-              }}
-              getRowId={(row) => row.userId}
-              getRowHeight={() => 'auto'}
-              sx={{
-                border: '1px solid #ccc',
-                // p: 1,
-                minHeight: '300px',
-                '& .MuiDataGrid-row': {
-                  borderTop: '1px solid #ccc', // Adds a border around each row
-                  py: 2,
-                },
-              }}
-            />
-          </Grid>
+              <Grid item xs={12}>
+                <DataGrid
+                  rows={studentList}
+                  columns={columns}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 10 },
+                    },
+                  }}
+                  getRowId={(row) => row.userId}
+                  getRowHeight={() => 'auto'}
+                  sx={{
+                    border: '1px solid #ccc',
+                    // p: 1,
+                    minHeight: '300px',
+                    '& .MuiDataGrid-row': {
+                      borderTop: '1px solid #ccc', // Adds a border around each row
+                      py: 2,
+                    },
+                  }}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </DashboardCard>
     </PageContainer>

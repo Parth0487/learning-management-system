@@ -53,16 +53,15 @@ if (userTypeCode === 'FACULTY') {
 
     {
       id: uniqueId(),
-      title: 'Announcements',
-      icon: IconSpeakerphone,
-      href: '/announcements',
-    },
-
-    {
-      id: uniqueId(),
       title: 'Quiz',
       icon: IconTextSpellcheck,
       href: '/quiz',
+    },
+    {
+      id: uniqueId(),
+      title: 'Announcements',
+      icon: IconSpeakerphone,
+      href: '/announcements',
     },
   ];
 }
@@ -71,23 +70,34 @@ if (userTypeCode === 'STUDENT') {
   MenuItems = [
     {
       id: uniqueId(),
-      title: 'Announcements',
-      icon: IconSpeakerphone,
-      href: '/announcements',
+      title: 'Courses',
+      icon: IconFileDescription,
+      href: '/courses',
+    },
+    {
+      id: uniqueId(),
+      title: 'Assignments',
+      icon: IconFile,
+      href: '/assignments',
     },
 
+    {
+      id: uniqueId(),
+      title: 'Quiz',
+      icon: IconTextSpellcheck,
+      href: '/quiz',
+    },
     {
       id: uniqueId(),
       title: 'Grades',
       icon: IconTable,
       href: '/grades',
     },
-
     {
       id: uniqueId(),
-      title: 'Courses',
-      icon: IconFileDescription,
-      href: '/courses',
+      title: 'Announcements',
+      icon: IconSpeakerphone,
+      href: '/announcements',
     },
   ];
 }

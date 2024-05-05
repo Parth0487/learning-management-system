@@ -18,10 +18,14 @@ import moment from 'moment'; // Ensure moment is installed or use native Date me
 import { DataGrid } from '@mui/x-data-grid';
 
 const QuizDetails = () => {
+  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const { userTypeCode = null, userId } = userDetails;
+
   const { id: quizId = 1 } = useParams();
   const [quiz, setQuiz] = useState({});
 
   const [studentList, setStudentList] = useState({});
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     fetchQuizDetails();
@@ -39,6 +43,7 @@ const QuizDetails = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setDescription(data.description);
         setQuiz(data);
       })
       .catch((error) => console.error('Error loading the quiz data:', error));
@@ -167,15 +172,70 @@ const QuizDetails = () => {
     // setIsPublished(event.target.checked);
   };
 
+  const updateContent = () => {
+    let req = { description, type: 'quiz', id: quizId };
+
+    fetch(`http://localhost:5000/update-content`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify(req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.success) {
+          alert('Content Updated!');
+        }
+
+        fetchQuizDetails();
+      })
+      .catch((error) => console.error('Error loading the course data:', error));
+  };
+
   return (
     <PageContainer title="Quiz Details" description="Detailed view of the quiz">
       <DashboardCard title="Quiz Details">
         <Typography variant="h5" gutterBottom>
           {quiz.title || 'No title available'}
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Grid item xs={12}>
+          {/* <Typography variant="body1" gutterBottom>
+              {courseData.description || 'No description available'}
+            </Typography> */}
+          <Typography>Content</Typography>
+          <TextField
+            fullWidth
+            value={description}
+            multiline
+            rows={20}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={!(userTypeCode === 'FACULTY')}
+            sx={{
+              '& .MuiInputBase-input.Mui-disabled': {
+                WebkitTextFillColor: '#000000',
+              },
+            }}
+          />
+        </Grid>
+        {userTypeCode === 'FACULTY' ? (
+          <Grid item xs={12} textAlign={'end'} mt={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={quiz.description === description}
+              onClick={() => {
+                updateContent();
+              }}
+            >
+              {' '}
+              Update Content{' '}
+            </Button>
+          </Grid>
+        ) : null}
+        {/* <Typography variant="body1" gutterBottom>
           {quiz.description || 'No description available'}
-        </Typography>
+        </Typography> */}
         <Divider style={{ margin: '20px 0' }} />
         <Typography variant="body2" color="textSecondary" gutterBottom>
           Due: {quiz.date ? moment(quiz.date).format('MMMM Do YYYY') : 'No due date'}
@@ -202,49 +262,49 @@ const QuizDetails = () => {
           complete look.
         </Typography>
         <Divider style={{ margin: '20px 0' }} />
-        <FormControlLabel
-          control={<Switch checked={quiz.isPublished === 'yes'} onChange={handlePublishChange} />}
-          label={quiz.isPublished === 'yes' ? 'Published' : 'Not Published'}
-          disabled={!isUpcoming(quiz.date)}
-        />
+        {['STUDENT'].includes(userTypeCode) ? null : (
+          <FormControlLabel
+            control={<Switch checked={quiz.isPublished === 'yes'} onChange={handlePublishChange} />}
+            label={quiz.isPublished === 'yes' ? 'Published' : 'Not Published'}
+            disabled={!isUpcoming(quiz.date)}
+          />
+        )}
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Box>
-              <Typography variant="h6">Student List</Typography>
-            </Box>
-          </Grid>
+        {['STUDENT'].includes(userTypeCode) ? null : (
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Box>
+                <Typography variant="h6">Student List</Typography>
+              </Box>
+            </Grid>
 
-          <Grid item xs={12}>
-            <DataGrid
-              rows={studentList}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 10 },
-                },
-              }}
-              getRowId={(row) => row.userId}
-              getRowHeight={() => 'auto'}
-              sx={{
-                border: '1px solid #ccc',
-                // p: 1,
-                minHeight: '300px',
-                '& .MuiDataGrid-row': {
-                  borderTop: '1px solid #ccc', // Adds a border around each row
-                  py: 2,
-                },
-                '& .MuiDataGrid-cell:focus-within': {
-                  outline: 'none', // Disables the blue outline on cell focus
-                },
-                // Optional: you can also apply a style to prevent the input from showing a focus outline
-                // '& input:focus': {
-                //   outline: 'none', // This will prevent the text field from showing an outline when focused
-                // },
-              }}
-            />
+            <Grid item xs={12}>
+              <DataGrid
+                rows={studentList}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 10 },
+                  },
+                }}
+                getRowId={(row) => row.userId}
+                getRowHeight={() => 'auto'}
+                sx={{
+                  border: '1px solid #ccc',
+                  // p: 1,
+                  minHeight: '300px',
+                  '& .MuiDataGrid-row': {
+                    borderTop: '1px solid #ccc', // Adds a border around each row
+                    py: 2,
+                  },
+                  '& .MuiDataGrid-cell:focus-within': {
+                    outline: 'none', // Disables the blue outline on cell focus
+                  },
+                }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </DashboardCard>
     </PageContainer>
   );

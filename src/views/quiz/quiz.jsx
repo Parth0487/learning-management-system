@@ -74,11 +74,6 @@ const Quiz = () => {
         </>
       ),
     },
-    // {
-    //   field: 'questions',
-    //   headerName: 'Questions',
-    //   width: 100,
-    // },
 
     {
       field: 'isPublished',
@@ -98,15 +93,17 @@ const Quiz = () => {
       <DashboardCard title="">
         <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
           <Typography variant="h6"> Quiz</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/quiz/create"
-            startIcon={<IconPlus />}
-          >
-            Create Quiz
-          </Button>
+          {['STUDENT'].includes(userTypeCode) ? null : (
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/quiz/create"
+              startIcon={<IconPlus />}
+            >
+              Create Quiz
+            </Button>
+          )}
         </Box>
         <DataGrid
           rows={tableData}

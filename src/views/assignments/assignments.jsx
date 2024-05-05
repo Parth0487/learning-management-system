@@ -118,15 +118,17 @@ const Assignments = () => {
       <DashboardCard title="">
         <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
           <Typography variant="h6"> Assignments</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/assignments/create"
-            startIcon={<IconPlus />}
-          >
-            Create Assignment
-          </Button>
+          {['STUDENT'].includes(userTypeCode) ? null : (
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/assignments/create"
+              startIcon={<IconPlus />}
+            >
+              Create Assignment
+            </Button>
+          )}
         </Box>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

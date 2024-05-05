@@ -45,7 +45,7 @@ const Quiz = () => {
       headerName: 'Title',
       width: 150,
     },
-    { field: 'description', headerName: 'Description', width: 350 },
+    // { field: 'description', headerName: 'Description', width: 350 },
     {
       field: 'type',
       headerName: 'Type',
@@ -59,14 +59,10 @@ const Quiz = () => {
     },
     {
       field: 'date',
-      headerName: 'Due Date',
+      headerName: 'Date',
       renderCell: (params) => (
         <>
-          <Typography variant="caption">
-            {moment(params.row.quizDate).format('MMM DD ')} by{' '}
-            {moment(params.row.quizDate).format('hh:mm a ')}
-          </Typography>
-          <br />
+          <Typography variant="caption">{moment(params.row.date).format('yyyy-MM-DD')}</Typography>
         </>
       ),
       width: 140,
@@ -90,11 +86,23 @@ const Quiz = () => {
       renderCell: (params) => (
         <>
           <Typography variant="caption">
-            {params.row.score} / {params.row.point}
+            <b> {params.row.score}</b> / {params.row.point}
           </Typography>
         </>
       ),
       width: 80,
+    },
+
+    {
+      field: 'semesterName',
+      headerName: 'SEM',
+      width: 100,
+    },
+
+    {
+      field: 'courseTitle',
+      headerName: 'Course Name',
+      width: 150,
     },
   ];
 
