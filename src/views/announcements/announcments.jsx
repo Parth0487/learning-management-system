@@ -5,11 +5,13 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const { REACT_APP_API } = process.env;
 
 const Announcement = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userTypeCode = null } = userDetails;
 

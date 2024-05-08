@@ -4,6 +4,7 @@ import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const { REACT_APP_API } = process.env;
 
@@ -15,7 +16,8 @@ const Quiz = () => {
   }, []);
 
   const fetchQuizList = async () => {
-    let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    // let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    let userDetails = getLoggedInUserDetails();
 
     fetch(`${REACT_APP_API}/score`, {
       method: 'POST',

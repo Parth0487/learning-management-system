@@ -21,9 +21,11 @@ import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import StudentImg from 'src/assets/images/profile/student.jpg';
 import AdminImg from 'src/assets/images/profile/admin.png';
 import FacultyImg from 'src/assets/images/profile/faculty.png';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const Profile = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userTypeCode = null } = userDetails;
 
@@ -38,7 +40,8 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    // let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    let userDetails = getLoggedInUserDetails();
     setUser(userDetails);
   }, []);
 

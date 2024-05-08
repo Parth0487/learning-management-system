@@ -16,10 +16,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const { REACT_APP_API } = process.env;
 
 const CreateQuiz = () => {
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
+
+  const { userTypeCode = null, userId = '' } = userDetails;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
@@ -65,15 +70,17 @@ const CreateQuiz = () => {
   }, []);
 
   const fetchCourseList = async () => {
+    let body = {
+      semester: [],
+      faculty: [userId],
+    };
+
     fetch(`${REACT_APP_API}/course`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Set the content type header
       },
-      body: JSON.stringify({
-        semester: [],
-        faculty: [],
-      }),
+      body: JSON.stringify(body),
     })
       .then((response) => response.json())
       .then((data) => {

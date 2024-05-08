@@ -17,10 +17,12 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import { useParams } from 'react-router';
 import moment from 'moment'; // Ensure moment is installed or use native Date methods
 import { DataGrid } from '@mui/x-data-grid';
+import { getLoggedInUserDetails } from 'src/utils/common';
 const { REACT_APP_API } = process.env;
 
 const AssignmentDetails = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userTypeCode = null } = userDetails;
 

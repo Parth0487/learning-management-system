@@ -14,11 +14,13 @@ import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const { REACT_APP_API } = process.env;
 
 const Course = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userTypeCode = null } = userDetails;
   const [tableData, setTableData] = useState([]);
@@ -126,6 +128,11 @@ const Course = () => {
       headerName: 'Description',
       // width: '70%',
       flex: 1,
+    },
+    {
+      field: 'semesterName',
+      headerName: 'SEM',
+      width: 80,
     },
 
     {

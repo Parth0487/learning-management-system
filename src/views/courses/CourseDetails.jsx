@@ -8,11 +8,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import { IconPlus } from '@tabler/icons';
 import AddStudent from './AddStudent';
 import AddFaculty from './AddFaculty';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const { REACT_APP_API } = process.env;
 
 const CourseDetails = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userTypeCode = null } = userDetails;
 

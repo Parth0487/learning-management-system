@@ -11,11 +11,13 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '@tabler/icons';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
 const { REACT_APP_API } = process.env;
 
 const Quiz = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userTypeCode = null, userId } = userDetails;
 
@@ -75,6 +77,17 @@ const Quiz = () => {
           <Typography variant="caption">{moment(params.row.date).format('yyyy-MM-DD')}</Typography>
         </>
       ),
+    },
+
+    {
+      field: 'courseTitle',
+      headerName: 'Course',
+      width: 150,
+    },
+    {
+      field: 'semesterName',
+      headerName: 'SEM',
+      width: 80,
     },
 
     {

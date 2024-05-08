@@ -17,10 +17,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router';
 import moment from 'moment';
+import { getLoggedInUserDetails } from 'src/utils/common';
 const { REACT_APP_API } = process.env;
 
 const CreateAnnouncement = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  // const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  const userDetails = getLoggedInUserDetails();
 
   const { userId } = userDetails;
 

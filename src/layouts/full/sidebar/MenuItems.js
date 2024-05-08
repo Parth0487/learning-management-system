@@ -11,8 +11,15 @@ import {
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
+import { getLoggedInUserDetails } from 'src/utils/common';
 
-const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+// const userDetails = JSON.parse(localStorage.getItem('userDetails') || 'null');
+
+// const { userTypeCode = null } = userDetails;
+
+const userDetails = await getLoggedInUserDetails();
+
+console.log('userDetails: ', userDetails);
 
 const { userTypeCode = null } = userDetails;
 
